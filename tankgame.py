@@ -80,7 +80,8 @@ class Game(object):
 
             running = self.handleEvents()
 
-            pygame.display.set_caption('PONG  %d fps')
+            pygame.display.set_caption('PONG  %d fps' % self.clock.get_fps())
+
 
             for sprite in self.sprites:
                 sprite.update()
