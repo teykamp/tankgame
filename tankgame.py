@@ -31,7 +31,7 @@ class Paddle(pygame.sprite.Sprite):
     def move(self, dy):
         if self.rect.bottom + dy >400:
             self.rect.bottom = 400
-        elif self.rect.top + dy < 0
+        elif self.rect.top + dy < 0:
             self.rect.top = 0
         else:
             self.rect.y += dy
@@ -55,7 +55,7 @@ class Game(object):
 
         pygame.display.set_caption("PONG")
 
-        pygame.event..set_allowed([QUIT, KEYDOWN, KEYUP]) 
+        pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP]) 
         
         self.backround = pygame.Surface((800, 400))
         self.backround.fill ((255,255,255))
@@ -101,7 +101,6 @@ class Game(object):
                 return False
 
 
-
             elif event.type == KEYDOWN:
 
                 if event.key == K_ESCAPE:
@@ -136,15 +135,11 @@ class Game(object):
                 if event.key == K_DOWN:
                     self.rightpaddle.up()
 
+        return True
 
 
-
-
-
-
-if__name__ == '__main__':
+if __name__ == '__main__':
     game = Game()
     game.run()
 
 
-    
