@@ -206,7 +206,7 @@ class Game(object):
 
             self.ball.vely *= -1
 
-            self.pongsound.play()
+            self.pingsound.play()
 
         if self.ball.rect.left < 0:
             self.scoreImage.right()
@@ -233,6 +233,7 @@ class Game(object):
 
             self.ball.vely += hitpaddle.velocity/3.0
 
+            self.pongsound.play()
 
 
 
