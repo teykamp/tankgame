@@ -199,7 +199,7 @@ class Game(object):
 
             self.ball.vely *= -1
 
-            self.pongsound.play()
+            self.pingsound.play()
 
         elif self.ball.rect.bottom > 400:
             self.ball.rect.bottom = 399
