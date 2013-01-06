@@ -51,6 +51,88 @@ class Paddle(pygame.sprite.Sprite):
         moving the sprite by its velocity"""
         self.move(self.velocity)
 
+
+class Ball(pygame.sprite.Sprite):
+    """docstring for Ball"""
+    def __init__(self,xy):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(os.path.join('images','pong_ball.gif'))
+
+
+ 
+        self.rect = self.image.get_rect()
+
+        self.rect.centerx, self.rect.centery = xy
+        self.maxspeed = 10
+        self.servespeed = 5
+        self.velx = 0
+        self.vely = 0
+
+    def reset(self):
+        self.rect.centerx, self.rect.centery = 400, 200
+        self.velx = 0
+        self.vely = 0        
+
+    def serve(self):
+        angle = random.randint(-45, 45)
+
+        if abs(angle) < 5 or abs(angle-180) < 5:
+            angle = random.randint(10,20)
+
+        if random.random() > .5:
+                angle += 180
+
+        x = math.cos(math.radians(angle))
+        y = math.sin(math.radians(angle))
+
+        self.velx = self.servespeed * x
+        self.vely = self.servespeed * y
+        
+
+class Score(pygame.sprite.Sprite) :
+    def __init__(self, xy):
+        pygame.sprite.Sprite.__init__(self)
+        self.xy = xy
+
+        self.font = pygame.font.Font(None, 50)
+
+        self.leftscore = 0
+
+        self.rightscore = 0
+
+        self.reRender()
+
+    def update(self):
+        pass 
+
+    def left(self):
+        self.leftscore += 1  
+
+        self.reRender()
+
+    def right(self):
+        self.rightscore += 1
+
+        self.reRender()
+
+    def reset(self):
+        self.leftscore = 0
+
+        self.rightscore = 0
+
+        self.reRender()
+
+    def reRender(self):
+        self.image = self.font.render("%d     %d"%(self.leftscore, self.rightscore), True, (0,0,0))
+        self.rect = self.image.get_rect()
+
+        self.rect.center = self.xy
+
+
+   
+
+
+
 class Game(object):
     """Our game object! This is a fairly simple object that handles the
     initialization of pygame and sets up our game to run."""
@@ -95,6 +177,66 @@ class Game(object):
         self.rightpaddle = Paddle((750,200))
         self.sprites.add(self.rightpaddle)
 
+        self.ball = Ball((400,200))
+
+        self.sprites.add(self.ball)
+
+        self.scoreImage = Score((400, 50))
+
+        self.sprites.add(self.scoreImage)
+
+        self.pingsound = pygame.mixer.Sound(os.path.join('sound', 'ping.wav'))
+
+        self.pongsound = pygame.mixer.Sound(os.path.join('sound', 'pong.wav'))
+
+
+    def manageBall(self):
+        self.ball.rect.x += self.ball.velx
+        self.ball.rect.y += self.ball.vely
+
+        if self.ball.rect.top < 0:
+            self.ball.rect.top = 1
+
+            self.ball.vely *= -1
+
+            self.pongsound.play()
+
+        elif self.ball.rect.bottom > 400:
+            self.ball.rect.bottom = 399
+
+            self.ball.vely *= -1
+
+            self.pongsound.play()
+
+        if self.ball.rect.left < 0:
+            self.scoreImage.right()
+
+            self.ball.reset()
+
+            return
+
+        elif self.ball.rect.right > 800:
+            self.scoreImage.left()
+
+            self.ball.reset()
+
+            return
+
+        collided = pygame.sprite.spritecollide(self.ball, [self.leftpaddle, self.rightpaddle], dokill=False)
+
+        if len(collided) > 0:
+            hitpaddle = collided[0]
+
+            self.ball.velx *= -1
+
+            self.ball.rect.x += self.ball.velx
+
+            self.ball.vely += hitpaddle.velocity/3.0
+
+
+
+
+
     def run(self):
         """Runs the game. Contains the game loop that computes and renders
         each frame."""
@@ -105,12 +247,15 @@ class Game(object):
         # run until something tells us to stop
         while running:
 
+
             # tick pygame clock
             # you can limit the fps by passing the desired frames per seccond to tick()
             self.clock.tick(60)
 
             # handle pygame events -- if user closes game, stop running
             running = self.handleEvents()
+
+            self.manageBall()
 
             # update the title bar with our frames per second
             pygame.display.set_caption('Pong   %d fps' % self.clock.get_fps())
@@ -154,6 +299,12 @@ class Game(object):
                 if event.key == K_DOWN:
                     self.rightpaddle.down()
 
+                if event.key == K_SPACE:
+                    if self.ball.velx == 0 and self.ball.vely == 0:
+                        self.ball.serve()
+
+
+
             elif event.type == KEYUP:
                 # paddle control
                 if event.key == K_w:
@@ -166,6 +317,8 @@ class Game(object):
                 if event.key == K_DOWN:
                     self.rightpaddle.up()
 
+
+
         return True
 
 
@@ -173,3 +326,14 @@ class Game(object):
 if __name__ == '__main__':
     game = Game()
     game.run()
+
+
+
+
+
+
+
+
+
+                
+
