@@ -242,8 +242,6 @@ class Game(object):
             self.pongsound.play()
 
 
-
-
     def run(self):
         """Runs the game. Contains the game loop that computes and renders
         each frame."""
