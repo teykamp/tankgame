@@ -186,7 +186,6 @@ class Game(object):
         self.sprites.add(self.scoreImage)
 
         self.pingsound = pygame.mixer.Sound(os.path.join('sound', 'ping.wav'))
-
         self.pongsound = pygame.mixer.Sound(os.path.join('sound', 'pong.wav'))
 
 
@@ -231,8 +230,7 @@ class Game(object):
 
             self.ball.rect.x += self.ball.velx
 
-            self.ball.vely += hitpaddle.velocity/3.0
-
+            self.ball.vely += hitpaddle.velocity/3.0             
             self.pongsound.play()
 
 
@@ -274,6 +272,7 @@ class Game(object):
 
         print 'Quitting. Thanks for playing'
 
+
     def handleEvents(self):
         """Poll for PyGame events and behave accordingly. Return false to stop
         the event loop and end the game."""
@@ -290,35 +289,31 @@ class Game(object):
                     return False
 
                 # paddle control
-                if event.key == K_w:
+                elif event.key == K_w:
                     self.leftpaddle.up()
-                if event.key == K_s:
+                elif event.key == K_s:
                     self.leftpaddle.down()
 
-                if event.key == K_UP:
+                elif event.key == K_UP:
                     self.rightpaddle.up()
-                if event.key == K_DOWN:
+                elif event.key == K_DOWN:
                     self.rightpaddle.down()
 
-                if event.key == K_SPACE:
+                elif event.key == K_SPACE:
                     if self.ball.velx == 0 and self.ball.vely == 0:
                         self.ball.serve()
-
-
 
             elif event.type == KEYUP:
                 # paddle control
                 if event.key == K_w:
                     self.leftpaddle.down()
-                if event.key == K_s:
+                elif event.key == K_s:
                     self.leftpaddle.up()
 
-                if event.key == K_UP:
+                elif event.key == K_UP:
                     self.rightpaddle.down()
-                if event.key == K_DOWN:
+                elif event.key == K_DOWN:
                     self.rightpaddle.up()
-
-
 
         return True
 
