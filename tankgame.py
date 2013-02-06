@@ -38,6 +38,14 @@ class Paddle(pygame.sprite.Sprite):
         """Decreases the vertical velocity"""
         self.velocity_y += self.movementspeed
 
+    def left(self):
+        """Increases the horizontal velocity"""
+        self.velocity_x -= self.movementspeed
+
+    def right(self):
+        """Decreases the horizontal velocity"""
+        self.velocity_x += self.movementspeed
+
     def move(self, dx, dy):
         """Move the paddle. Don't go off the screen."""
         if self.rect.right + dx > 800:
@@ -298,6 +306,16 @@ class Game(object):
                 elif event.key == K_s:
                     self.leftpaddle.down()
 
+                elif event.key == K_d:
+                    self.leftpaddle.right()
+                elif event.key == K_a:
+                    self.leftpaddle.left()
+
+                elif event.key == K_RIGHT:
+                    self.rightpaddle.right()
+                elif event.key == K_LEFT:
+                    self.rightpaddle.left()
+
                 elif event.key == K_UP:
                     self.rightpaddle.up()
                 elif event.key == K_DOWN:
@@ -314,10 +332,20 @@ class Game(object):
                 elif event.key == K_s:
                     self.leftpaddle.up()
 
+                elif event.key == K_d:
+                    self.leftpaddle.left()
+                elif event.key == K_a:
+                    self.leftpaddle.right()
+
                 elif event.key == K_UP:
                     self.rightpaddle.down()
                 elif event.key == K_DOWN:
                     self.rightpaddle.up()
+
+                elif event.key == K_RIGHT:
+                    self.rightpaddle.left()
+                elif event.key == K_LEFT:
+                    self.rightpaddle.right()
 
         return True
 
@@ -326,14 +354,3 @@ class Game(object):
 if __name__ == '__main__':
     game = Game()
     game.run()
-
-
-
-
-
-
-
-
-
-                
-
